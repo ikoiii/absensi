@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { FadeIn } from '@/components/animated/fade-in';
+import { StaggerChildren } from '@/components/animated/stagger-container';
 
 export default async function StudentDashboard() {
   const { user } = await requireRole('student');
@@ -57,46 +59,54 @@ export default async function StudentDashboard() {
       </div>
 
       {/* Quick Action */}
-      <Card className="border-primary/50 bg-primary/5">
-        <CardContent className="pt-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-lg font-semibold">Scan QR Code</h3>
-              <p className="text-sm text-muted-foreground">
-                Scan QR code untuk absen
-              </p>
+      <FadeIn type="slideUp">
+        <Card className="border-primary/50 bg-primary/5">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold">Scan QR Code</h3>
+                <p className="text-sm text-muted-foreground">
+                  Scan QR code untuk absen
+                </p>
+              </div>
+              <Link href="/student/scan">
+                <Button size="lg">
+                  <CheckCircle className="mr-2 h-5 w-5" />
+                  Scan Sekarang
+                </Button>
+              </Link>
             </div>
-            <Link href="/student/scan">
-              <Button size="lg">
-                <CheckCircle className="mr-2 h-5 w-5" />
-                Scan Sekarang
-              </Button>
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </FadeIn>
 
       {/* Statistics Cards */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <StatCard
-          title="Absen Hari Ini"
-          value={todayAttendance || 0}
-          icon={CheckCircle}
-          description="Sesi yang sudah diabsen"
-        />
-        <StatCard
-          title="Total Kehadiran"
-          value={totalAttendance || 0}
-          icon={Clock}
-          description="Total sesi yang diikuti"
-        />
-        <StatCard
-          title="Sesi Aktif"
-          value={activeSessions || 0}
-          icon={Activity}
-          description="Sesi yang sedang berjalan"
-        />
-      </div>
+      <StaggerChildren fast className="grid gap-4 md:grid-cols-3">
+        <FadeIn type="slideUp">
+          <StatCard
+            title="Absen Hari Ini"
+            value={todayAttendance || 0}
+            icon={CheckCircle}
+            description="Sesi yang sudah diabsen"
+          />
+        </FadeIn>
+        <FadeIn type="slideUp">
+          <StatCard
+            title="Total Kehadiran"
+            value={totalAttendance || 0}
+            icon={Clock}
+            description="Total sesi yang diikuti"
+          />
+        </FadeIn>
+        <FadeIn type="slideUp">
+          <StatCard
+            title="Sesi Aktif"
+            value={activeSessions || 0}
+            icon={Activity}
+            description="Sesi yang sedang berjalan"
+          />
+        </FadeIn>
+      </StaggerChildren>
 
       {/* Recent Attendance */}
       <Card>

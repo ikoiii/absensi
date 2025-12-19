@@ -1,206 +1,263 @@
-# Rancangan Struktur Folder - Sistem Absensi Mahasiswa
+# Project Folder Structure
 
-## 📂 Struktur Folder Proyek
+Updated: December 20, 2025
+
+## Root Structure
 
 ```
-absen/
-├── app/                          # Next.js App Router
-│   ├── (auth)/                   # Route group untuk authentication
-│   │   ├── login/
-│   │   │   └── page.tsx         # Halaman login
-│   │   ├── register/
-│   │   │   └── page.tsx         # Halaman registrasi
-│   │   └── layout.tsx           # Layout khusus auth (centered, no navbar)
-│   │
-│   ├── (dashboard)/              # Route group untuk authenticated pages
-│   │   ├── admin/                # Admin routes
-│   │   │   ├── page.tsx         # Dashboard admin
-│   │   │   ├── sessions/        # Manajemen sesi
-│   │   │   │   ├── page.tsx     # List semua sesi
-│   │   │   │   ├── new/
-│   │   │   │   │   └── page.tsx # Buat sesi baru
-│   │   │   │   └── [id]/
-│   │   │   │       └── page.tsx # Detail sesi + QR Code
-│   │   │   ├── students/        # Manajemen mahasiswa
-│   │   │   │   ├── page.tsx     # List mahasiswa
-│   │   │   │   ├── new/
-│   │   │   │   │   └── page.tsx # Tambah mahasiswa
-│   │   │   │   └── [id]/
-│   │   │   │       └── page.tsx # Edit mahasiswa
-│   │   │   └── reports/
-│   │   │       └── page.tsx     # Laporan absensi
-│   │   │
-│   │   ├── student/              # Student routes
-│   │   │   ├── page.tsx         # Dashboard mahasiswa
-│   │   │   ├── scan/
-│   │   │   │   └── page.tsx     # Scanner QR
-│   │   │   └── history/
-│   │   │       └── page.tsx     # Riwayat kehadiran
-│   │   │
-│   │   └── layout.tsx           # Layout dengan navbar & sidebar
-│   │
-│   ├── api/                      # API routes (jika diperlukan)
-│   │   └── auth/
-│   │       └── callback/
-│   │           └── route.ts     # Callback Supabase auth
-│   │
-│   ├── layout.tsx               # Root layout
-│   ├── page.tsx                 # Landing page / Homepage
-│   ├── globals.css              # Global styles
-│   └── favicon.ico              # Favicon
-│
-├── components/                   # React components
-│   ├── ui/                      # shadcn/ui components
-│   │   ├── button.tsx
-│   │   ├── card.tsx
-│   │   ├── input.tsx
-│   │   ├── table.tsx
-│   │   ├── dialog.tsx
-│   │   ├── toast.tsx
-│   │   ├── badge.tsx
-│   │   ├── form.tsx
-│   │   └── ...
-│   │
-│   ├── layout/                  # Layout components
-│   │   ├── navbar.tsx           # Navigation bar
-│   │   ├── sidebar.tsx          # Sidebar navigation
-│   │   └── footer.tsx           # Footer
-│   │
-│   ├── auth/                    # Auth-related components
-│   │   ├── login-form.tsx       # Form login
-│   │   ├── register-form.tsx    # Form registrasi
-│   │   └── auth-guard.tsx       # Protected route wrapper
-│   │
-│   ├── admin/                   # Admin-specific components
-│   │   ├── session-form.tsx     # Form create/edit sesi
-│   │   ├── student-form.tsx     # Form create/edit mahasiswa
-│   │   ├── attendance-table.tsx # Tabel kehadiran
-│   │   └── stats-card.tsx       # Card statistik dashboard
-│   │
-│   ├── student/                 # Student-specific components
-│   │   ├── qr-scanner.tsx       # QR Scanner component
-│   │   ├── attendance-list.tsx  # List riwayat kehadiran
-│   │   └── attendance-card.tsx  # Card kehadiran
-│   │
-│   └── shared/                  # Shared components
-│       ├── qr-code-display.tsx  # Display QR Code
-│       ├── loading-spinner.tsx  # Loading state
-│       ├── error-message.tsx    # Error display
-│       └── empty-state.tsx      # Empty state placeholder
-│
-├── lib/                         # Utility functions & configurations
-│   ├── supabase/
-│   │   ├── client.ts           # Supabase client (browser)
-│   │   ├── server.ts           # Supabase server client
-│   │   └── middleware.ts       # Auth middleware
-│   ├── utils.ts                # Utility functions (cn, etc.)
-│   ├── validations.ts          # Zod schemas untuk validasi
-│   └── constants.ts            # Constants (roles, status, etc.)
-│
-├── types/                       # TypeScript types & interfaces
-│   ├── database.ts             # Auto-generated Supabase types
-│   ├── auth.ts                 # Auth-related types
-│   ├── session.ts              # Session types
-│   ├── attendance.ts           # Attendance types
-│   └── index.ts                # Export semua types
-│
-├── hooks/                       # Custom React hooks
-│   ├── use-user.ts             # Hook untuk get current user
-│   ├── use-session.ts          # Hook untuk session data
-│   ├── use-attendance.ts       # Hook untuk attendance data
-│   └── use-realtime.ts         # Hook untuk Supabase realtime
-│
-├── actions/                     # Server actions (Next.js)
-│   ├── auth.ts                 # Auth server actions
-│   ├── session.ts              # Session CRUD actions
-│   ├── student.ts              # Student CRUD actions
-│   └── attendance.ts           # Attendance actions
-│
-├── docs/                        # Dokumentasi
-│   ├── prd.md                  # Product Requirements Document
-│   ├── task-checklist.md       # Task checklist
-│   ├── folder-structure.md     # Dokumen ini
-│   └── api-reference.md        # API documentation (future)
-│
-├── public/                      # Static assets
-│   ├── images/
-│   │   ├── logo.svg
-│   │   └── hero.png
-│   └── icons/
-│       └── ...
-│
-├── middleware.ts                # Next.js middleware (auth protection)
-├── .env.local                   # Environment variables (gitignored)
-├── .env.example                 # Example env file
-├── tailwind.config.ts           # Tailwind configuration (akan dibuat)
-├── components.json              # shadcn/ui config (akan dibuat)
-├── tsconfig.json                # TypeScript config
-├── next.config.ts               # Next.js config
-└── package.json                 # Dependencies
+/home/ikoi/Documents/project/absen/
+├── app/                    # Next.js 14 App Router
+├── components/             # React components
+├── lib/                    # Utilities and configurations
+├── actions/                # Server actions
+├── supabase/              # Database migrations
+├── docs/                  # Documentation
+├── public/                # Static assets
+└── .agent/                # Agent workflows (if exists)
 ```
 
-## 📝 Penjelasan Struktur
+---
 
-### **app/** - Next.js App Router
+## `/app` - Application Pages
 
-Menggunakan struktur App Router dengan route groups untuk memisahkan layout yang berbeda:
+```
+app/
+├── (auth)/                # Authentication pages (grouped route)
+│   ├── login/
+│   │   └── page.tsx      # Login page with form animations
+│   ├── register/
+│   │   └── page.tsx      # Student registration (role forced)
+│   └── layout.tsx         # Auth layout wrapper
+│
+├── admin/                 # Admin dashboard (protected)
+│   ├── manage-admins/
+│   │   └── page.tsx      # Admin management page
+│   ├── sessions/
+│   │   ├── page.tsx      # Sessions list
+│   │   ├── [id]/
+│   │   │   └── page.tsx  # Session detail with QR code
+│   │   └── new/
+│   │       └── page.tsx  # Create new session
+│   ├── students/
+│   │   └── page.tsx      # Students list
+│   ├── layout.tsx         # Admin layout with sidebar + mobile nav
+│   └── page.tsx           # Admin dashboard with animated stats
+│
+├── student/               # Student dashboard (protected)
+│   ├── history/
+│   │   └── page.tsx      # Attendance history with animations
+│   ├── scan/
+│   │   └── page.tsx      # QR code scanner
+│   ├── layout.tsx         # Student layout with mobile nav
+│   └── page.tsx           # Student dashboard with stats
+│
+├── layout.tsx             # Root layout (providers, fonts)
+├── globals.css            # Global styles + Tailwind
+└── page.tsx               # Landing page with animations
+```
 
-- **(auth)**: Halaman authentication tanpa navbar
-- **(dashboard)**: Halaman authenticated dengan navbar & sidebar
-- **admin/**: Fitur khusus admin
-- **student/**: Fitur khusus mahasiswa
+---
 
-### **components/** - React Components
+## `/components` - React Components
 
-Diorganisir berdasarkan fungsi dan domain:
+```
+components/
+├── admin/                 # Admin-specific components
+│   ├── admin-list.tsx     # Admin accounts list with delete
+│   ├── attendance-list.tsx # Real-time attendance with animations
+│   ├── create-admin-form.tsx # Admin creation form
+│   ├── create-session-form.tsx # Session creation form
+│   ├── delete-session-button.tsx # Session deletion with dialog
+│   └── stat-card.tsx      # Dashboard stat card
+│
+├── animated/              # **NEW** Framer Motion wrappers
+│   ├── fade-in.tsx        # Reusable fade-in component
+│   └── stagger-container.tsx # Staggered children wrapper
+│
+├── shared/                # Shared components
+│   └── qr-code-display.tsx # QR code with spring animation
+│
+└── ui/                    # shadcn/ui components
+    ├── alert-dialog.tsx   # Confirmation dialogs
+    ├── badge.tsx
+    ├── button.tsx
+    ├── card.tsx
+    ├── form.tsx
+    ├── input.tsx
+    ├── label.tsx
+    ├── select.tsx
+    ├── sheet.tsx          # Mobile hamburger menu
+    ├── skeleton.tsx
+    ├── skeletons.tsx      # **NEW** Custom loading skeletons with pulse
+    ├── states.tsx         # **NEW** UI states (Loading, Empty, Error, NotFound)
+    ├── toast.tsx
+    └── toaster.tsx
+```
 
-- **ui/**: shadcn/ui components (reusable UI primitives)
-- **layout/**: Layout components (navbar, sidebar, footer)
-- **auth/**, **admin/**, **student/**: Domain-specific components
-- **shared/**: Components yang digunakan di berbagai domain
+---
 
-### **lib/** - Utilities & Configuration
+## `/lib` - Libraries & Utilities
 
-- **supabase/**: Konfigurasi Supabase client & middleware
-- **utils.ts**: Helper functions seperti `cn()` untuk className merging
-- **validations.ts**: Zod schemas untuk form & data validation
-- **constants.ts**: Centralized constants
+```
+lib/
+├── animations.ts          # **NEW** Framer Motion utilities
+│                          # - 15+ variants (fadeIn, slideUp, scaleIn, etc.)
+│                          # - Transitions (fast, normal, slow, spring)
+│                          # - Helper functions (prefersReducedMotion)
+│
+├── auth.ts                # Authentication utilities
+│                          # - requireRole() for route protection
+│
+├── supabase/
+│   ├── client.ts          # Client-side Supabase
+│   └── server.ts          # Server-side Supabase
+│
+├── validations.ts         # Zod schemas for forms
+└── utils.ts               # General utilities (cn, etc.)
+```
 
-### **types/** - TypeScript Types
+---
 
-Semua type definitions untuk type safety:
+## `/actions` - Server Actions
 
-- **database.ts**: Auto-generated dari Supabase schema
-- Domain-specific types untuk auth, session, attendance
+```
+actions/
+├── admin.ts               # Admin management actions
+│                          # - createAdminAction
+│                          # - listAdminsAction
+│                          # - deleteAdminAction
+│
+├── auth.ts                # Authentication actions
+│                          # - loginAction
+│                          # - registerAction
+│                          # - logoutAction
+│
+├── attendance.ts          # Attendance actions
+│                          # - recordAttendanceAction
+│
+└── session.ts             # Session management actions
+                           # - createSessionAction
+                           # - closeSessionAction
+                           # - deleteSessionAction
+```
 
-### **hooks/** - Custom Hooks
+---
 
-React hooks untuk data fetching dan state management:
+## `/supabase` - Database
 
-- Menggunakan Supabase client
-- Implement real-time subscriptions
-- Handle loading & error states
+```
+supabase/
+└── migrations/
+    ├── 001_create_profiles.sql
+    ├── 002_create_sessions.sql
+    ├── 003_create_attendance.sql
+    ├── 004_setup_rls.sql
+    ├── 005_add_session_close.sql
+    ├── 006_complete_rls_fix.sql
+    ├── 007_add_delete_policy.sql        # Profiles DELETE policy
+    └── 008_add_session_delete_policies.sql # Sessions & Attendance DELETE
+```
 
-### **actions/** - Server Actions
+---
 
-Next.js Server Actions untuk mutations:
+## `/docs` - Documentation
 
-- Form submissions
-- CRUD operations
-- Backend logic yang aman
+```
+docs/
+├── admin-registration.md              # Admin account creation guide
+├── folder-structure.md                # This file
+├── session-deletion-fix.md            # Session deletion RLS fix guide
+├── ui-modernization-plan.md           # Full 5-week UI/UX plan
+└── ui-modernization-phase1-report.md  # Phase 1 completion report
+```
 
-## 🎯 Prinsip Organisasi
+---
 
-1. **Separation of Concerns**: Setiap folder punya tanggung jawab spesifik
-2. **Domain-Driven**: Components diorganisir by domain (admin/student)
-3. **Co-location**: Related files ditempatkan berdekatan
-4. **Scalability**: Mudah menambah fitur baru tanpa restrukturisasi
-5. **Type Safety**: Centralized types untuk consistency
+## Key Features by Location
 
-## 🚀 Next Steps
+### Authentication & Authorization
 
-1. Install shadcn/ui dan setup komponen dasar
-2. Setup Supabase configuration di `lib/supabase/`
-3. Generate database types dari Supabase schema
-4. Implement auth middleware
-5. Build components by priority (auth → admin → student)
+- **Location:** `lib/auth.ts`, `actions/auth.ts`, `app/(auth)/`
+- **Features:** Role-based access, session management, protected routes
+
+### Admin Features
+
+- **Location:** `app/admin/`, `components/admin/`, `actions/admin.ts`
+- **Features:**
+  - Dashboard with animated stats
+  - Session management (CRUD with animations)
+  - Student management
+  - Admin account management
+  - Real-time attendance monitoring
+
+### Student Features
+
+- **Location:** `app/student/`, `actions/attendance.ts`
+- **Features:**
+  - QR code scanner
+  - Attendance history with animations
+  - Dashboard with stats
+  - Mobile-first design
+
+### UI/UX Enhancements
+
+- **Location:** `components/animated/`, `components/ui/`, `lib/animations.ts`
+- **Features:**
+  - Framer Motion animations (60fps)
+  - Loading skeletons with pulse
+  - UI state components
+  - Mobile responsive design
+  - Reduced motion support
+
+---
+
+## New Additions (Phase 1 & 2)
+
+### Phase 1 (Animation Foundation)
+
+- ✅ `lib/animations.ts` - Animation utilities
+- ✅ `components/animated/` - Animated wrappers
+- ✅ `components/ui/skeletons.tsx` - Loading skeletons
+- ✅ `components/ui/states.tsx` - UI states
+
+### Phase 2 (Page Modernization)
+
+- ✅ `app/page.tsx` - Landing page with animations
+- ✅ `app/admin/page.tsx` - Dashboard with staggered cards
+- ✅ `app/student/page.tsx` - Dashboard with animations
+- ✅ Mobile responsiveness improvements
+
+---
+
+## Technology Stack
+
+- **Framework:** Next.js 14 (App Router)
+- **Runtime:** Bun
+- **Database:** Supabase (PostgreSQL)
+- **Styling:** Tailwind CSS
+- **UI Components:** shadcn/ui
+- **Animations:** Framer Motion v12.23.26
+- **Forms:** React Hook Form + Zod
+- **State:** React Server Components + Server Actions
+
+---
+
+## Development Workflow
+
+1. **Pages** → `app/` routes
+2. **Components** → `components/` organized by feature
+3. **Logic** → `actions/` server actions
+4. **Database** → `supabase/migrations/`
+5. **Utilities** → `lib/` shared code
+6. **Documentation** → `docs/` guides
+
+---
+
+## Notes
+
+- All admin routes require `requireRole('admin')`
+- All student routes require `requireRole('student')`
+- Public routes: Landing, Login, Register
+- Mobile navigation uses `Sheet` component
+- All animations respect `prefers-reduced-motion`
+- RLS policies enforced at database level

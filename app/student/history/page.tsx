@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { requireRole } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
+import { motion } from 'framer-motion';
 import {
   Card,
   CardContent,
@@ -12,6 +13,8 @@ import { Badge } from '@/components/ui/badge';
 import { Calendar, CheckCircle2 } from 'lucide-react';
 import { AttendanceListSkeleton } from '@/components/ui/skeletons';
 import { EmptyState } from '@/components/ui/states';
+import { StaggerChildren } from '@/components/animated/stagger-container';
+import { slideUp } from '@/lib/animations';
 
 async function AttendanceHistory() {
   const { user } = await requireRole('student');
@@ -49,40 +52,42 @@ async function AttendanceHistory() {
   }
 
   return (
-    <div className="space-y-4">
+    <StaggerChildren fast className="space-y-4">
       {attendance.map((record: any) => (
-        <Card key={record.id}>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Calendar className="h-5 w-5 text-primary" />
-                <CardTitle className="text-lg">
-                  {record.sessions?.course_name || 'Unknown Course'}
-                </CardTitle>
+        <motion.div key={record.id} variants={slideUp}>
+          <Card className="hover:shadow-md transition-shadow">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-primary" />
+                  <CardTitle className="text-lg">
+                    {record.sessions?.course_name || 'Unknown Course'}
+                  </CardTitle>
+                </div>
+                <Badge variant="outline" className="gap-1">
+                  <CheckCircle2 className="h-3 w-3" />
+                  Hadir
+                </Badge>
               </div>
-              <Badge variant="outline" className="gap-1">
-                <CheckCircle2 className="h-3 w-3" />
-                Hadir
-              </Badge>
-            </div>
-            <CardDescription>
-              {new Date(record.created_at).toLocaleDateString('id-ID', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
-              Waktu absen:{' '}
-              {new Date(record.created_at).toLocaleTimeString('id-ID')}
-            </p>
-          </CardContent>
-        </Card>
+              <CardDescription>
+                {new Date(record.created_at).toLocaleDateString('id-ID', {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">
+                Waktu absen:{' '}
+                {new Date(record.created_at).toLocaleTimeString('id-ID')}
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
       ))}
-    </div>
+    </StaggerChildren>
   );
 }
 

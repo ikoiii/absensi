@@ -5,6 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { FadeIn } from '@/components/animated/fade-in';
+import { StaggerChildren } from '@/components/animated/stagger-container';
+import { slideUp } from '@/lib/animations';
 
 export default async function AdminDashboard() {
   const supabase = await createClient();
@@ -53,26 +56,32 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Statistics Cards */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <StatCard
-          title="Kehadiran Hari Ini"
-          value={todayAttendance || 0}
-          icon={ClipboardCheck}
-          description="Total mahasiswa hadir hari ini"
-        />
-        <StatCard
-          title="Sesi Aktif"
-          value={activeSessions || 0}
-          icon={Activity}
-          description="Sesi yang sedang berjalan"
-        />
-        <StatCard
-          title="Total Mahasiswa"
-          value={totalStudents || 0}
-          icon={Users}
-          description="Mahasiswa terdaftar"
-        />
-      </div>
+      <StaggerChildren fast className="grid gap-4 md:grid-cols-3">
+        <FadeIn type="slideUp">
+          <StatCard
+            title="Kehadiran Hari Ini"
+            value={todayAttendance || 0}
+            icon={ClipboardCheck}
+            description="Total mahasiswa hadir hari ini"
+          />
+        </FadeIn>
+        <FadeIn type="slideUp">
+          <StatCard
+            title="Sesi Aktif"
+            value={activeSessions || 0}
+            icon={Activity}
+            description="Sesi yang sedang berjalan"
+          />
+        </FadeIn>
+        <FadeIn type="slideUp">
+          <StatCard
+            title="Total Mahasiswa"
+            value={totalStudents || 0}
+            icon={Users}
+            description="Mahasiswa terdaftar"
+          />
+        </FadeIn>
+      </StaggerChildren>
 
       {/* Recent Sessions */}
       <Card>

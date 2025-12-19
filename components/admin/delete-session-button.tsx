@@ -79,13 +79,8 @@ export function DeleteSessionButton({ sessionId, sessionName }: DeleteSessionBut
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Konfirmasi Hapus Sesi</AlertDialogTitle>
-          <AlertDialogDescription className="space-y-2">
-            <p>
-              Anda yakin ingin menghapus sesi "{sessionName}"?
-            </p>
-            <p className="font-semibold text-destructive">
-              ⚠️ PERINGATAN: Tindakan ini akan menghapus SEMUA data kehadiran untuk sesi ini dan TIDAK DAPAT dibatalkan.
-            </p>
+          <AlertDialogDescription>
+            Anda yakin ingin menghapus sesi "{sessionName}"? Sesi yang sudah dihapus tidak dapat dikembalikan!
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
