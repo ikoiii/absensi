@@ -8,7 +8,7 @@
 [![Framer Motion](https://img.shields.io/badge/Framer_Motion-12.23-purple)](https://www.framer.com/motion/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-![Landing Page Screenshot](docs/screenshots/landing-page.png)
+![DEMO](https://absensi-sigma-two.vercel.app/)
 
 ---
 
