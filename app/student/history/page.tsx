@@ -1,20 +1,9 @@
 import { Suspense } from 'react';
 import { requireRole } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
-import { motion } from 'framer-motion';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Calendar, CheckCircle2 } from 'lucide-react';
 import { AttendanceListSkeleton } from '@/components/ui/skeletons';
 import { EmptyState } from '@/components/ui/states';
-import { StaggerChildren } from '@/components/animated/stagger-container';
-import { slideUp } from '@/lib/animations';
+import { AnimatedAttendanceList } from '@/components/student/animated-attendance-list';
 
 async function AttendanceHistory() {
   const { user } = await requireRole('student');
@@ -24,7 +13,7 @@ async function AttendanceHistory() {
     .from('attendance')
     .select(`
       id,
-      created_at,
+      scanned_at,
       sessions (
         id,
         course_name,
@@ -32,9 +21,10 @@ async function AttendanceHistory() {
       )
     `)
     .eq('student_id', user.id)
-    .order('created_at', { ascending: false });
+    .order('scanned_at', { ascending: false });
 
   if (error) {
+    console.error('Error loading attendance:', error);
     throw new Error('Failed to load attendance history');
   }
 
@@ -51,44 +41,7 @@ async function AttendanceHistory() {
     );
   }
 
-  return (
-    <StaggerChildren fast className="space-y-4">
-      {attendance.map((record: any) => (
-        <motion.div key={record.id} variants={slideUp}>
-          <Card className="hover:shadow-md transition-shadow">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-primary" />
-                  <CardTitle className="text-lg">
-                    {record.sessions?.course_name || 'Unknown Course'}
-                  </CardTitle>
-                </div>
-                <Badge variant="outline" className="gap-1">
-                  <CheckCircle2 className="h-3 w-3" />
-                  Hadir
-                </Badge>
-              </div>
-              <CardDescription>
-                {new Date(record.created_at).toLocaleDateString('id-ID', {
-                  weekday: 'long',
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Waktu absen:{' '}
-                {new Date(record.created_at).toLocaleTimeString('id-ID')}
-              </p>
-            </CardContent>
-          </Card>
-        </motion.div>
-      ))}
-    </StaggerChildren>
-  );
+  return <AnimatedAttendanceList attendance={attendance} />;
 }
 
 export default async function StudentHistoryPage() {
