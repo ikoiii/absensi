@@ -14,6 +14,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { EmptyState } from '@/components/ui/states';
 import { useToast } from '@/hooks/use-toast';
 import { Trash2, Shield } from 'lucide-react';
 
@@ -60,9 +61,10 @@ export function AdminList({ admins }: AdminListProps) {
 
   if (admins.length === 0) {
     return (
-      <div className="text-center py-8 text-muted-foreground">
-        Belum ada admin terdaftar
-      </div>
+      <EmptyState
+        title="Belum Ada Admin"
+        description="Belum ada admin terdaftar. Buat admin pertama menggunakan form di sebelah kiri."
+      />
     );
   }
 

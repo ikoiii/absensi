@@ -12,9 +12,9 @@ import { QRCodeDisplay } from '@/components/shared/qr-code-display';
 import { AttendanceList } from '@/components/admin/attendance-list';
 import { CloseSessionButton } from '@/components/admin/close-session-button';
 import { DeleteSessionButton } from '@/components/admin/delete-session-button';
+import { NotFoundState } from '@/components/ui/states';
 import Link from 'next/link';
 import { ArrowLeft, Download } from 'lucide-react';
-import { notFound } from 'next/navigation';
 
 export default async function SessionDetailPage({
   params,
@@ -25,7 +25,14 @@ export default async function SessionDetailPage({
   const data = await getSessionWithAttendance(id);
 
   if (!data) {
-    notFound();
+    return (
+      <NotFoundState
+        title="Sesi Tidak Ditemukan"
+        message="Sesi yang Anda cari tidak ditemukan. Mungkin sudah dihapus atau ID tidak valid."
+        backHref="/admin/sessions"
+        backLabel="Kembali ke Daftar Sesi"
+      />
+    );
   }
 
   const { session, attendance } = data;

@@ -3,37 +3,37 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Badge } from '@/components/ui/badge';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { Skeleton } from '@/components/ui/skeleton';
+import { CheckCircle2, User } from 'lucide-react';
+import { AttendanceListSkeleton } from '@/components/ui/skeletons';
+import { EmptyState } from '@/components/ui/states';
 
-interface AttendanceRecord {
+interface AttendanceWithProfile {
   id: string;
-  scanned_at: string;
+  student_id: string;
+  created_at: string;
   profiles: {
-    id: string;
     full_name: string;
-    nim: string | null;
+    nim: string;
+    email: string;
   } | null;
 }
 
-interface AttendanceListProps {
+export function AttendanceList({
+  sessionId,
+  initialAttendance,
+}: {
   sessionId: string;
-  initialAttendance: AttendanceRecord[];
-}
-
-export function AttendanceList({ sessionId, initialAttendance }: AttendanceListProps) {
-  const [attendance, setAttendance] = useState<AttendanceRecord[]>(initialAttendance);
-  const supabase = createClient();
+  initialAttendance: AttendanceWithProfile[];
+}) {
+  const [attendance, setAttendance] = useState<AttendanceWithProfile[]>(
+    initialAttendance
+  );
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Subscribe to realtime changes
+    const supabase = createClient();
+
+    // Subscribe to new attendance records
     const channel = supabase
       .channel(`attendance-${sessionId}`)
       .on(
@@ -45,80 +45,82 @@ export function AttendanceList({ sessionId, initialAttendance }: AttendanceListP
           filter: `session_id=eq.${sessionId}`,
         },
         async (payload) => {
-          // Fetch the new attendance record with profile data
-          const { data } = await supabase
-            .from('attendance')
-            .select(`
-              id,
-              scanned_at,
-              profiles:student_id (
-                id,
-                full_name,
-                nim
-              )
-            `)
-            .eq('id', payload.new.id)
+          // Fetch the profile data for the new attendance
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('full_name, nim, email')
+            .eq('id', payload.new.student_id)
             .single();
 
-          if (data) {
-            setAttendance((prev) => [data as AttendanceRecord, ...prev]);
-          }
+          const newAttendance: AttendanceWithProfile = {
+            id: payload.new.id,
+            student_id: payload.new.student_id,
+            created_at: payload.new.created_at,
+            profiles: profile,
+          };
+
+          setAttendance((prev) => [newAttendance, ...prev]);
         }
       )
       .subscribe();
 
     return () => {
-      channel.unsubscribe();
+      supabase.removeChannel(channel);
     };
-  }, [sessionId, supabase]);
+  }, [sessionId]);
+
+  if (isLoading) {
+    return <AttendanceListSkeleton count={5} />;
+  }
 
   if (attendance.length === 0) {
     return (
-      <div className="text-center py-12 text-muted-foreground">
-        Belum ada mahasiswa yang hadir
-      </div>
+      <EmptyState
+        title="Belum Ada Kehadiran"
+        description="Belum ada mahasiswa yang melakukan absensi untuk sesi ini. Kehadiran akan muncul di sini secara real-time."
+      />
     );
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="font-semibold">
-          Daftar Kehadiran ({attendance.length} mahasiswa)
-        </h3>
-        <Badge variant="outline" className="animate-pulse">
-          Real-time
-        </Badge>
-      </div>
-
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>No</TableHead>
-            <TableHead>Nama</TableHead>
-            <TableHead>NIM</TableHead>
-            <TableHead>Waktu Scan</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {attendance.map((record, index) => (
-            <TableRow key={record.id}>
-              <TableCell>{index + 1}</TableCell>
-              <TableCell className="font-medium">
-                {record.profiles?.full_name || '-'}
-              </TableCell>
-              <TableCell>{record.profiles?.nim || '-'}</TableCell>
-              <TableCell>
-                {new Date(record.scanned_at).toLocaleString('id-ID', {
+    <div className="space-y-3">
+      {attendance.map((record) => (
+        <div
+          key={record.id}
+          className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+              <User className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <p className="font-medium">
+                {record.profiles?.full_name || 'Unknown'}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {record.profiles?.nim || 'No NIM'}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="text-right">
+              <p className="text-sm font-medium">
+                {new Date(record.created_at).toLocaleTimeString('id-ID', {
                   hour: '2-digit',
                   minute: '2-digit',
-                  second: '2-digit',
                 })}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {new Date(record.created_at).toLocaleDateString('id-ID')}
+              </p>
+            </div>
+            <Badge variant="outline" className="gap-1">
+              <CheckCircle2 className="h-3 w-3" />
+              Hadir
+            </Badge>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
