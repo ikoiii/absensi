@@ -485,20 +485,5 @@ Terima kasih kepada semua kontributor!
 - [Framer Motion](https://www.framer.com/motion/) - Animation library
 - [Vercel](https://vercel.com/) - Hosting platform
 
----
 
-## 📞 Support
 
-Butuh bantuan? Buka [GitHub Issues](https://github.com/yourusername/absen/issues)
-
----
-
-## 🌟 Star History
-
-Jika project ini membantu, beri ⭐ di GitHub!
-
-[![Star History Chart](https://api.star-history.com/svg?repos=yourusername/absen&type=Date)](https://star-history.com/#yourusername/absen&Date)
-
----
-
-**Made with ❤️ for better education**
