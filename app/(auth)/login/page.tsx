@@ -50,15 +50,21 @@ export default function LoginPage() {
           description: result.error,
           variant: 'destructive',
         });
+        setIsLoading(false);
       }
       // If successful, server action will redirect
-    } catch (error) {
+    } catch (error: any) {
+      // Check if error is from Next.js redirect (expected behavior)
+      if (error?.message?.includes('NEXT_REDIRECT')) {
+        // This is expected, do nothing
+        return;
+      }
+      
       toast({
         title: 'Error',
         description: 'Terjadi kesalahan. Silakan coba lagi.',
         variant: 'destructive',
       });
-    } finally {
       setIsLoading(false);
     }
   }

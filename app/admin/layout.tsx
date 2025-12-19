@@ -1,9 +1,16 @@
 import { requireRole } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import { LayoutDashboard, Users, ClipboardList, LogOut, UserCog } from 'lucide-react';
+import { LayoutDashboard, Users, ClipboardList, LogOut, UserCog, Menu } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet';
 import { logoutAction } from '@/actions/auth';
 
 const navigation = [
@@ -83,11 +90,64 @@ export default async function AdminLayout({
         <header className="flex items-center justify-between h-16 px-6 bg-white border-b dark:bg-gray-800 dark:border-gray-700 md:hidden">
           <Link href="/admin" className="flex items-center gap-2">
             <ClipboardList className="h-6 w-6 text-primary" />
-            <span className="font-bold">Admin</span>
+            <span className="font-bold">Admin Panel</span>
           </Link>
-          <Button variant="ghost" size="sm">
-            Menu
-          </Button>
+          
+          {/* Mobile Menu */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Menu className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-64">
+              <div className="flex flex-col h-full">
+                <SheetHeader className="sr-only">
+                  <SheetTitle>Navigation Menu</SheetTitle>
+                </SheetHeader>
+                
+                {/* User Info */}
+                <div className="mb-6 px-2 py-4">
+                  <p className="text-sm font-medium">{profile?.full_name}</p>
+                  <p className="text-xs text-muted-foreground">Administrator</p>
+                </div>
+
+                <Separator className="mb-4" />
+
+                {/* Navigation */}
+                <nav className="flex-1 space-y-2">
+                  {navigation.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        className="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      >
+                        <Icon className="h-5 w-5" />
+                        {item.name}
+                      </Link>
+                    );
+                  })}
+                </nav>
+
+                <Separator className="my-4" />
+
+                {/* Logout */}
+                <form action={logoutAction}>
+                  <Button
+                    type="submit"
+                    variant="outline"
+                    className="w-full justify-start"
+                    size="sm"
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </Button>
+                </form>
+              </div>
+            </SheetContent>
+          </Sheet>
         </header>
 
         {/* Page Content */}
